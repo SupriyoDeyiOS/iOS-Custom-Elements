@@ -8,11 +8,15 @@
 import UIKit
 
 class CustomSegmentedControl: UIControl {
-    var buttons = [UIButton]()
-    var selector: UIView!
+    private var buttons = [UIButton]()
+    private var selector: UIView!
+    
     var selectedSegmentIndex = 0
     
     var bgColor: UIColor = UIColor(red: 0.94, green: 0.94, blue: 0.94, alpha: 1.00)
+    var selectorColor: UIColor = UIColor(red: 0.16, green: 0.56, blue: 0.85, alpha: 1.00)
+    var selectedTextColor: UIColor = UIColor.white
+    var textColor: UIColor = UIColor(red: 0.47, green: 0.47, blue: 0.47, alpha: 1.00)
     
     var buttonTitles: [String] = [] {
         didSet {
@@ -46,14 +50,14 @@ class CustomSegmentedControl: UIControl {
         
         selector = UIView(frame: CGRect(x: 5, y: 5, width: selectorWidth-10, height: selectorHeight-10))
         selector.layer.cornerRadius = 20
-        selector.backgroundColor = UIColor(red: 0.16, green: 0.56, blue: 0.85, alpha: 1.00)
+        selector.backgroundColor = selectorColor
         addSubview(selector)
         
         for (index, title) in buttonTitles.enumerated() {
             let button = UIButton(type: .custom)
             button.setTitle(title, for: .normal)
             button.titleLabel?.font = UIFont.systemFont(ofSize: 18)
-            button.setTitleColor(selectedSegmentIndex==index ? .white : UIColor(red: 0.47, green: 0.47, blue: 0.47, alpha: 1.00), for: .normal)
+            button.setTitleColor(selectedSegmentIndex==index ? selectedTextColor : textColor, for: .normal)
             button.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
             buttons.append(button)
             addSubview(button)
@@ -98,9 +102,9 @@ class CustomSegmentedControl: UIControl {
             let selectorX = self.frame.width / CGFloat(self.buttons.count) * CGFloat(self.selectedSegmentIndex)
             self.selector.frame.origin.x = selectorX+5
             for btn in self.buttons {
-                btn.setTitleColor(UIColor(red: 0.47, green: 0.47, blue: 0.47, alpha: 1.00), for: .normal)
+                btn.setTitleColor(self.textColor, for: .normal)
             }
-            self.buttons[self.selectedSegmentIndex].setTitleColor(.white, for: .normal)
+            self.buttons[self.selectedSegmentIndex].setTitleColor(self.selectedTextColor, for: .normal)
         }
         
         // Notify the target of the value change
